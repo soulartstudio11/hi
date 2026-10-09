@@ -1,0 +1,603 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Liya Proposal | Admin Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --pink: #ff85ad;
+    --dark: #1b1028;
+    --light: #ffe5ef;
+}
+
+body {
+    min-height: 100vh;
+    padding: 24px;
+    font-family: "Segoe UI", sans-serif;
+    color: white;
+    background:
+        radial-gradient(circle at 10% 10%, #833e76 0, transparent 35%),
+        radial-gradient(circle at 90% 90%, #6e315c 0, transparent 35%),
+        linear-gradient(135deg, #130b20, #32152f, #4a2040);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: min(100%, 900px);
+}
+
+.login-card {
+    max-width: 440px;
+    margin: auto;
+    padding: 38px 28px;
+    text-align: center;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 28px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 80px #0004;
+    animation: appear .6s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.logo {
+    width: 85px;
+    height: 85px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 22px;
+    border-radius: 25px;
+    font-size: 43px;
+    background: linear-gradient(135deg, #ff85ad, #d56bce);
+    box-shadow: 0 10px 35px #ff85ad35;
+}
+
+h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(27px, 5vw, 37px);
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: #e7ccdf;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid #ffffff35;
+    background: #ffffff12;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 8px;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+input:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px #ff85ad20;
+}
+
+input::placeholder {
+    color: #cdb5c9;
+    letter-spacing: 5px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    border-radius: 13px;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: .25s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+
+.login-btn {
+    width: 100%;
+    color: #35132a;
+    background: linear-gradient(135deg, #ffb1ca, #ff79a8);
+}
+
+.error {
+    color: #ffb5c8;
+    min-height: 23px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.footer {
+    font-size: 12px;
+    color: #cbb4ca;
+    margin-top: 24px;
+    line-height: 1.7;
+}
+
+/* DASHBOARD */
+
+#dashboard {
+    display: none;
+    animation: appear .6s ease;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    font-size: 32px;
+}
+
+.brand h2 {
+    font-size: 21px;
+}
+
+.brand p {
+    font-size: 12px;
+    color: #d4bad0;
+    margin-top: 4px;
+}
+
+.logout {
+    color: white;
+    background: #ffffff12;
+    border: 1px solid #ffffff20;
+}
+
+.welcome {
+    padding: 30px;
+    border-radius: 23px;
+    background: linear-gradient(115deg, #a83c73, #70417e);
+    box-shadow: 0 15px 40px #0002;
+    margin-bottom: 22px;
+}
+
+.welcome h1 {
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    line-height: 1.7;
+    color: #ffe1ee;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.box {
+    padding: 25px;
+    border-radius: 21px;
+    background: #ffffff0d;
+    border: 1px solid #ffffff16;
+    min-width: 0;
+}
+
+.box h3 {
+    font-size: 15px;
+    color: #e8c9df;
+    margin-bottom: 17px;
+}
+
+.big {
+    font-size: clamp(20px, 4vw, 29px);
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.description {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #d8c2d5;
+    margin-top: 10px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 9px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 12px;
+}
+
+.accepted {
+    color: #baffd4;
+    background: #20b96b25;
+    border: 1px solid #5ce9a060;
+}
+
+.rejected {
+    color: #ffc1ce;
+    background: #ff426325;
+    border: 1px solid #ff7c9360;
+}
+
+.waiting {
+    color: #ffe5a8;
+    background: #ffc85720;
+    border: 1px solid #ffc85750;
+}
+
+.activity {
+    margin-top: 18px;
+}
+
+.activity p {
+    line-height: 1.8;
+    font-size: 14px;
+    color: #f3ddeb;
+    overflow-wrap: anywhere;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.refresh {
+    color: #35132a;
+    background: #ffabc6;
+}
+
+.proposal {
+    color: white;
+    background: #ffffff12;
+    border: 1px solid #ffffff25;
+    text-decoration: none;
+    padding: 14px 20px;
+    border-radius: 13px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.notice {
+    margin-top: 22px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #ffffff09;
+    color: #d9c3d5;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+@media(max-width: 600px) {
+    body {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 30px;
+    }
+
+    .login-card {
+        padding: 30px 20px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome {
+        padding: 23px;
+    }
+
+    .box {
+        padding: 21px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <!-- PASSWORD LOGIN -->
+    <section class="login-card" id="login">
+        <div class="logo">🔐</div>
+
+        <h1>Private Love Panel</h1>
+
+        <p class="subtitle">
+            Welcome back, Admin.<br>
+            Your little corner for the Liya proposal. ❤️
+        </p>
+
+        <form id="loginForm">
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                aria-label="Admin password"
+                required
+            >
+
+            <button class="login-btn" type="submit">
+                Unlock Dashboard ♡
+            </button>
+        </form>
+
+        <div class="error" id="error" role="alert"></div>
+
+        <p class="footer">
+            PRIVATE ACCESS · LOVE PROJECT<br>
+            Made with ❤️
+        </p>
+    </section>
+
+
+    <!-- ADMIN DASHBOARD -->
+    <section id="dashboard">
+
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-icon">💗</div>
+                <div>
+                    <h2>Liya Love Panel</h2>
+                    <p>Proposal administration</p>
+                </div>
+            </div>
+
+            <button class="logout" onclick="logout()">
+                🔒 Lock Panel
+            </button>
+        </header>
+
+        <section class="welcome">
+            <h1>Welcome, Admin! 🌹</h1>
+            <p>
+                Here's the latest proposal status for Liya.
+                Every love story begins with an honest answer.
+            </p>
+        </section>
+
+        <div class="grid">
+
+            <article class="box">
+                <h3>👩 HER NAME</h3>
+                <div class="big">Liya</div>
+                <p class="description">
+                    The special person this proposal was created for.
+                </p>
+            </article>
+
+            <article class="box">
+                <h3>💌 PROPOSAL STATUS</h3>
+                <div class="big" id="statusTitle">
+                    Waiting...
+                </div>
+                <span class="status-badge waiting" id="statusBadge">
+                    Waiting for an answer
+                </span>
+                <p class="description" id="statusDescription">
+                    No response has been recorded in this browser.
+                </p>
+            </article>
+
+            <article class="box">
+                <h3>🕒 RESPONSE TIME</h3>
+                <div class="big" id="responseTime">—</div>
+                <p class="description">
+                    The locally saved response time, if available.
+                </p>
+            </article>
+
+            <article class="box">
+                <h3>📊 RESPONSE DETAILS</h3>
+                <div class="big" id="responseDetails">No response</div>
+                <p class="description" id="detailDescription">
+                    Open the proposal page to test the choices.
+                </p>
+            </article>
+
+        </div>
+
+        <article class="box activity">
+            <h3>📋 ACTIVITY</h3>
+            <p id="activity">
+                The dashboard is ready.
+            </p>
+
+            <div class="actions">
+                <button class="refresh" onclick="refreshStatus()">
+                    ↻ Refresh Status
+                </button>
+
+                <a class="proposal" href="index.html">
+                    💌 Open Proposal
+                </a>
+            </div>
+        </article>
+
+        <div class="notice">
+            <strong>Privacy note:</strong>
+            This demo reads browser-local storage. It cannot receive
+            answers from another phone or computer automatically.
+            The password is included in this HTML file and is not
+            secure against someone inspecting its source code.
+            For a genuinely private dashboard, use server-side
+            authentication and a shared database.
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+"use strict";
+
+const ADMIN_PASSWORD = "7605";
+
+const loginSection = document.getElementById("login");
+const dashboardSection = document.getElementById("dashboard");
+const passwordInput = document.getElementById("password");
+const errorElement = document.getElementById("error");
+
+// Admin password check
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    if (passwordInput.value === ADMIN_PASSWORD) {
+        loginSection.style.display = "none";
+        dashboardSection.style.display = "block";
+        errorElement.textContent = "";
+
+        passwordInput.value = "";
+        refreshStatus();
+    } else {
+        errorElement.textContent = "Incorrect password. Try again.";
+        passwordInput.value = "";
+        passwordInput.focus();
+    }
+});
+
+// Safely insert text into the activity area.
+function setText(id, value) {
+    document.getElementById(id).textContent = value;
+}
+
+// Read the answer saved by index.html in this browser.
+function refreshStatus() {
+    let answer = null;
+    let time = null;
+
+    try {
+        answer = localStorage.getItem("liyaProposalAnswer");
+
+        // Compatibility with the earlier index.html version.
+        if (!answer) {
+            const oldAnswer = localStorage.getItem("liyaProposalAccepted");
+
+            if (oldAnswer === "yes") {
+                answer = "accepted";
+            }
+        }
+
+        time = localStorage.getItem("liyaProposalTime");
+    } catch (error) {
+        setText(
+            "activity",
+            "Browser storage is unavailable. The response cannot be read."
+        );
+        return;
+    }
+
+    const badge = document.getElementById("statusBadge");
+
+    badge.className = "status-badge";
+
+    if (answer === "accepted") {
+        setText("statusTitle", "Accepted ❤️");
+        setText("statusDescription", "Liya accepted your love!");
+        setText("responseDetails", "YES! 💖");
+        setText(
+            "detailDescription",
+            "The proposal acceptance was saved in this browser."
+        );
+        setText(
+            "activity",
+            "❤️ Acceptance recorded locally. Refresh to check again."
+        );
+
+        badge.textContent = "Accepted";
+        badge.classList.add("accepted");
+
+    } else if (answer === "rejected") {
+        setText("statusTitle", "Rejected 💔");
+        setText("statusDescription", "Liya declined the proposal.");
+        setText("responseDetails", "Rejected");
+        setText(
+            "detailDescription",
+            "The rejection was saved in this browser."
+        );
+        setText(
+            "activity",
+            "💔 Rejection recorded locally. Please respect her answer."
+        );
+
+        badge.textContent = "Rejected";
+        badge.classList.add("rejected");
+
+    } else {
+        setText("statusTitle", "Waiting...");
+        setText(
+            "statusDescription",
+            "No response has been recorded in this browser."
+        );
+        setText("responseDetails", "No response");
+        setText(
+            "detailDescription",
+            "Open the proposal page and choose Accept or Reject."
+        );
+        setText(
+            "activity",
+            "💌 No proposal response found in this browser yet."
+        );
+
+        badge.textContent = "Waiting for an answer";
+        badge.classList.add("waiting");
+    }
+
+    setText("responseTime", time || "Not available");
+}
+
+// Lock the dashboard and clear the visible details.
+function logout() {
+    dashboardSection.style.display = "none";
+    loginSection.style.display = "block";
+    passwordInput.value = "";
+    errorElement.textContent = "";
+}
+</script>
+
+</body>
+</html>
+```

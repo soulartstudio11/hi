@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise for Liya ❤️</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow: hidden;
+    font-family: "Segoe UI", sans-serif;
+    color: white;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3, #b388ff);
+}
+
+.hearts {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.heart {
+    position: absolute;
+    bottom: -50px;
+    animation: floatUp linear infinite;
+    opacity: .7;
+}
+
+@keyframes floatUp {
+    from {
+        transform: translateY(0) rotate(0deg);
+        opacity: .7;
+    }
+    to {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 470px);
+    padding: 36px 25px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 28px;
+    background: rgba(255,255,255,.18);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 20px 70px rgba(90,0,40,.2);
+    animation: appear .7s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.emoji {
+    font-size: 66px;
+    margin-bottom: 18px;
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    50% { transform: scale(1.1); }
+}
+
+h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(28px, 7vw, 39px);
+    line-height: 1.2;
+    margin-bottom: 18px;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+button {
+    border: none;
+    border-radius: 30px;
+    padding: 14px 23px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+button:hover {
+    transform: translateY(-3px) scale(1.04);
+}
+
+.primary {
+    color: #e83e70;
+    background: white;
+    box-shadow: 0 8px 22px rgba(90,0,30,.15);
+}
+
+.accept {
+    color: white;
+    background: #e91e63;
+}
+
+.reject {
+    color: #8a2148;
+    background: #ffe4ec;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.progress {
+    height: 5px;
+    background: rgba(255,255,255,.3);
+    border-radius: 10px;
+    margin-top: 28px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    width: 0;
+    background: white;
+    border-radius: 10px;
+    transition: width .4s;
+}
+
+.small {
+    font-size: 12px;
+    margin: 14px 0 0;
+    opacity: .85;
+}
+
+#content {
+    animation: appear .5s ease;
+}
+
+@media(max-width: 400px) {
+    .card {
+        padding: 29px 18px;
+    }
+
+    button {
+        padding: 13px 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<main class="card">
+
+    <div id="content"></div>
+
+    <div class="progress">
+        <div class="bar" id="bar"></div>
+    </div>
+
+    <p class="small">Made with love, just for you ❤️</p>
+
+</main>
+
+<script>
+const pages = [
+    {
+        emoji: "💌",
+        title: "Hey, Liya!",
+        message: "I have a little surprise for you. There is something special I want to tell you from my heart.",
+        button: "Open My Surprise 💗"
+    },
+    {
+        emoji: "🌷",
+        title: "You Are Special",
+        message: "Some people make ordinary days extraordinary. Your smile and the little things about you make you special to me.",
+        button: "Continue 🥹"
+    },
+    {
+        emoji: "✨",
+        title: "A Little Confession",
+        message: "I've wanted to tell you how I feel. Today, I decided to put my feelings into words just for you.",
+        button: "Tell Me ❤️"
+    },
+    {
+        emoji: "💖",
+        title: "Dear Liya...",
+        message: "You mean a lot to me. I want to be honest about my feelings, and now I have one special question for you.",
+        button: "One Last Question 💌"
+    }
+];
+
+let current = 0;
+
+function render() {
+    const page = pages[current];
+    const content = document.getElementById("content");
+
+    content.style.animation = "none";
+    void content.offsetWidth;
+    content.style.animation = "appear .5s ease";
+
+    content.innerHTML = `
+        <div class="emoji">${page.emoji}</div>
+        <h1>${page.title}</h1>
+        <p>${page.message}</p>
+        <button class="primary" onclick="nextPage()">
+            ${page.button}
+        </button>
+    `;
+
+    document.getElementById("bar").style.width =
+        ((current + 1) / (pages.length + 1) * 100) + "%";
+}
+
+function nextPage() {
+    if (current < pages.length - 1) {
+        current++;
+        render();
+    } else {
+        showQuestion();
+    }
+}
+
+function showQuestion() {
+    document.getElementById("content").innerHTML = `
+        <div class="emoji">💍</div>
+
+        <h1>Will You Accept My Love?</h1>
+
+        <p>
+            Dear Liya, ❤️<br>
+            I wanted to tell you how special you are to me.
+            Will you accept my love?
+            Whatever your answer, I respect your feelings.
+        </p>
+
+        <div class="buttons">
+            <button class="accept" onclick="saveAnswer('accepted')">
+                Accept ❤️
+            </button>
+
+            <button class="reject" onclick="saveAnswer('rejected')">
+                Reject 💔
+            </button>
+        </div>
+    `;
+
+    document.getElementById("bar").style.width = "100%";
+}
+
+function saveAnswer(answer) {
+    try {
+        localStorage.setItem("liyaProposalAnswer", answer);
+        localStorage.setItem("liyaProposalTime", new Date().toLocaleString());
+    } catch (error) {
+        console.warn("The answer could not be saved in this browser.");
+    }
+
+    if (answer === "accepted") {
+        showResult(
+            "💖",
+            "OK, Thank You!",
+            "Thank you, Liya! ❤️ Your answer means a lot to me. I'll always treasure this beautiful moment. 🌹"
+        );
+
+        celebrate();
+    } else {
+        showResult(
+            "💔",
+            "OK, Bye",
+            "Thank you for being honest, Liya. ❤️ I respect your decision and wish you happiness. Take care. 🌷"
+        );
+    }
+}
+
+function showResult(emoji, title, message) {
+    const content = document.getElementById("content");
+
+    content.style.animation = "none";
+    void content.offsetWidth;
+    content.style.animation = "appear .5s ease";
+
+    content.innerHTML = `
+        <div class="emoji">${emoji}</div>
+        <h1>${title}</h1>
+        <p>${message}</p>
+        <p style="font-size:30px; margin-bottom:0;">
+            ${title === "OK, Thank You!" ? "💕 🌹 💕" : "🌷 💗"}
+        </p>
+    `;
+
+    document.getElementById("bar").style.width = "100%";
+}
+
+function celebrate() {
+    for (let i = 0; i < 35; i++) {
+        const item = document.createElement("div");
+
+        item.textContent = ["❤️", "💕", "💖", "🌸", "✨"][
+            Math.floor(Math.random() * 5)
+        ];
+
+        item.style.position = "fixed";
+        item.style.left = Math.random() * 100 + "vw";
+        item.style.top = Math.random() * 100 + "vh";
+        item.style.fontSize = (18 + Math.random() * 20) + "px";
+        item.style.zIndex = "10";
+        item.style.pointerEvents = "none";
+        item.style.animation = "appear .5s ease";
+
+        document.body.appendChild(item);
+
+        setTimeout(() => item.remove(), 3000);
+    }
+}
+
+// Floating hearts in the background
+for (let i = 0; i < 25; i++) {
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+    heart.textContent = ["❤", "♡", "💕"][i % 3];
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.fontSize = (15 + Math.random() * 25) + "px";
+    heart.style.animationDuration = (7 + Math.random() * 10) + "s";
+    heart.style.animationDelay = (-Math.random() * 12) + "s";
+
+    document.getElementById("hearts").appendChild(heart);
+}
+
+render();
+</script>
+
+</body>
+</html>
+```
